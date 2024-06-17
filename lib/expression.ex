@@ -156,6 +156,13 @@ defmodule Expression do
     e in RuntimeError -> {:error, e.message}
   end
 
+  @doc """
+  Generate an error map
+  """
+  @spec error(message :: term) :: %{required(String.t()) => term}
+  def error(message),
+    do: %{"__type__" => "expression/v1error", "error" => true, "message" => to_string(message)}
+
   defdelegate prewalk(ast, fun), to: Macro
   defdelegate traverse(ast, acc, pre, post), to: Macro
 end
