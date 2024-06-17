@@ -88,18 +88,31 @@ defmodule Expression.Callbacks.Standard do
   @expression_doc doc: "Negative offsets",
                   expression: "datetime_add(date(2020, 02, 29), -1, \"D\")",
                   result: ~U[2020-02-28 00:00:00.000000Z]
+  @expression_doc doc: "Invalid date inputs",
+                  expression: "datetime_add(\"_..[0]._\", 0, \"h\")",
+                  context: %{},
+                  result: %{
+                    "__type__" => "expression/v1error",
+                    "error" => true,
+                    "message" => "Invalid date"
+                  }
   def datetime_add(ctx, datetime, offset, unit) do
     datetime = DateHelpers.extract_datetimeish(eval!(datetime, ctx))
-    [offset, unit] = eval_args!([offset, unit], ctx)
 
-    case unit do
-      "Y" -> Timex.shift(datetime, years: offset)
-      "M" -> Timex.shift(datetime, months: offset)
-      "W" -> Timex.shift(datetime, weeks: offset)
-      "D" -> Timex.shift(datetime, days: offset)
-      "h" -> Timex.shift(datetime, hours: offset)
-      "m" -> Timex.shift(datetime, minutes: offset)
-      "s" -> Timex.shift(datetime, seconds: offset)
+    if is_struct(datetime, DateTime) do
+      [offset, unit] = eval_args!([offset, unit], ctx)
+
+      case unit do
+        "Y" -> Timex.shift(datetime, years: offset)
+        "M" -> Timex.shift(datetime, months: offset)
+        "W" -> Timex.shift(datetime, weeks: offset)
+        "D" -> Timex.shift(datetime, days: offset)
+        "h" -> Timex.shift(datetime, hours: offset)
+        "m" -> Timex.shift(datetime, minutes: offset)
+        "s" -> Timex.shift(datetime, seconds: offset)
+      end
+    else
+      Expression.error("Invalid date")
     end
   end
 
