@@ -1093,10 +1093,12 @@ defmodule Expression.Callbacks.Standard do
     found_date = DateHelpers.extract_dateish(expression)
     test_date = DateHelpers.extract_dateish(date_string)
 
-    with {:ok, match} <- date_compare(found_date, test_date) do
-      matched_date_value(match == :eq, found_date, test_date)
-    else
-      {:error, error} -> matched_date_value(false, found_date, test_date, error: error)
+    case date_compare(found_date, test_date) do
+      {:ok, match} ->
+        matched_date_value(match == :eq, found_date, test_date)
+
+      {:error, error} ->
+        matched_date_value(false, found_date, test_date, error: error)
     end
   end
 
@@ -1120,10 +1122,12 @@ defmodule Expression.Callbacks.Standard do
     found_date = DateHelpers.extract_dateish(expression)
     test_date = DateHelpers.extract_dateish(date_string)
 
-    with {:ok, match} <- date_compare(found_date, test_date) do
-      matched_date_value(match == :gt, found_date, test_date)
-    else
-      {:error, error} -> matched_date_value(false, found_date, test_date, error: error)
+    case date_compare(found_date, test_date) do
+      {:ok, match} ->
+        matched_date_value(match == :gt, found_date, test_date)
+
+      {:error, error} ->
+        matched_date_value(false, found_date, test_date, error: error)
     end
   end
 
@@ -1147,10 +1151,12 @@ defmodule Expression.Callbacks.Standard do
     found_date = DateHelpers.extract_dateish(expression)
     test_date = DateHelpers.extract_dateish(date_string)
 
-    with {:ok, match} <- date_compare(found_date, test_date) do
-      matched_date_value(match == :lt, found_date, test_date)
-    else
-      {:error, error} -> matched_date_value(false, found_date, test_date, error: error)
+    case date_compare(found_date, test_date) do
+      {:ok, match} ->
+        matched_date_value(match == :lt, found_date, test_date)
+
+      {:error, error} ->
+        matched_date_value(false, found_date, test_date, error: error)
     end
   end
 
@@ -1620,6 +1626,8 @@ defmodule Expression.Callbacks.Standard do
                   context: %{},
                   result: false
   @spec is_error(Expression.Context.t(), %{required(String.t()) => term}) :: boolean
+  # Disable credo as the expression function is standardised to has an `is_*` predicate
+  # credo:disable-for-next-line Credo.Check.Readability.PredicateFunctionNames
   def is_error(ctx, value) do
     case eval!(value, ctx) do
       %{"__type__" => "expression/v1error"} -> true
