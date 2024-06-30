@@ -273,17 +273,6 @@ defmodule Expression.Eval do
     end
   end
 
-  defp parse_number(value) when is_binary(value) do
-    case Decimal.parse(value) do
-      {decimal, _} ->
-        (Decimal.integer?(decimal) && Decimal.to_integer(decimal)) ||
-          Decimal.to_float(decimal)
-
-      :error ->
-        value
-    end
-  end
-
   defp parse_number(value), do: value
 
   @doc """
