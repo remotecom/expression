@@ -17,11 +17,30 @@ defmodule Expression.ContextTest do
              Context.new(context)
   end
 
-  test "new context from a context containing a string starting with zero" do
-    context = %{"national_id" => "01234567"}
+  test "new context from a context containing numbers" do
+    values = [
+      %{"score" => 1234},
+      %{"rate" => 1.1234567}
+    ]
 
-    # Assert that the string is not parsed as integer
-    assert %{"national_id" => "01234567"} == Context.new(context)
+    for context <- values do
+      # Assert that the number is not parsed
+      assert Context.new(context) == context
+    end
+  end
+
+  test "new context from a context containing a string starting with zero" do
+    values = [
+      %{"national_id" => "01234567"},
+      %{"code" => "01234abc"},
+      %{"rate" => "0.1234567"},
+      %{"password" => "0.123abc"}
+    ]
+
+    for context <- values do
+      # Assert that the string starting with zero is not parsed as number
+      assert Context.new(context) == context
+    end
   end
 
   describe "context is parsed correctly when using the `skip_context_evaluation?` option" do
