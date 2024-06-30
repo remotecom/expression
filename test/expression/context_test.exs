@@ -17,6 +17,13 @@ defmodule Expression.ContextTest do
              Context.new(context)
   end
 
+  test "new context from a context containing a string starting with zero" do
+    context = %{"national_id" => "01234567"}
+
+    # Assert that the string is not parsed as integer
+    assert %{"national_id" => "01234567"} == Context.new(context)
+  end
+
   describe "context is parsed correctly when using the `skip_context_evaluation?` option" do
     test "string values in context that resemble booleans should not be parsed as booleans" do
       # By default (without the flag) boolean-ish string values as parsed as booleans

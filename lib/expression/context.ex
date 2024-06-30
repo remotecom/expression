@@ -49,6 +49,15 @@ defmodule Expression.Context do
     {key, evaluate!(value, opts)}
   end
 
+  # Prevent implictly converting integers starting with a zero
+  defp iterate({key, "0" <> value}, opts) when is_binary(value) do
+    if String.match?("0" <> value, ~r/^[+]?\d+([.]\d+)?$/) do
+      {key, "0" <> value}
+    else
+      iterate({key, value}, opts)
+    end
+  end
+
   defp iterate({key, value}, opts) when is_binary(value) do
     if Keyword.get(opts, :skip_context_evaluation?, false) do
       {key, value}
@@ -64,8 +73,7 @@ defmodule Expression.Context do
   end
 
   defp evaluate!(ctx, opts) when is_list(ctx) do
-    ctx
-    |> Enum.map(&evaluate!(&1, opts))
+    Enum.map(ctx, &evaluate!(&1, opts))
   end
 
   defp evaluate!(binary, _) when is_binary(binary) do

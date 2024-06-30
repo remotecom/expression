@@ -451,8 +451,8 @@ defmodule Expression.Callbacks.Standard do
   @doc """
   Returns the absolute value of a number
   """
-  @expression_doc expression: "abs(-1)",
-                  result: 1
+  @expression_doc expression: "abs(-1)", result: 1
+  @expression_doc expression: "abs(-0.5)", result: 0.5
   def abs(ctx, number) do
     abs(eval!(number, ctx))
   end
@@ -572,14 +572,11 @@ defmodule Expression.Callbacks.Standard do
   "You have 4.21 in your account"
   ```
   """
-  @expression_doc expression: "fixed(4.209922, 2, false)",
-                  result: "4.21"
-  @expression_doc expression: "fixed(4000.424242, 4, true)",
-                  result: "4,000.4242"
-  @expression_doc expression: "fixed(3.7979, 2, false)",
-                  result: "3.80"
-  @expression_doc expression: "fixed(3.7979, 2)",
-                  result: "3.80"
+  @expression_doc expression: "fixed(4.209922, 2, false)", result: "4.21"
+  @expression_doc expression: "fixed(4000.424242, 4, true)", result: "4,000.4242"
+  @expression_doc expression: "fixed(3.7979, 2, false)", result: "3.80"
+  @expression_doc expression: "fixed(3.7979, 2)", result: "3.80"
+  @expression_doc expression: "fixed(0.0909, 2)", result: "0.09"
   def fixed(ctx, number, precision) do
     [number, precision] = eval_args!([number, precision], ctx)
     Number.Delimit.number_to_delimited(number, precision: precision)
@@ -1321,6 +1318,7 @@ defmodule Expression.Callbacks.Standard do
   @expression_doc expression: "has_number_eq(\"the number is 42\", 42)", result: true
   @expression_doc expression: "has_number_eq(\"the number is 42\", 42.0)", result: true
   @expression_doc expression: "has_number_eq(\"the number is 42\", \"42\")", result: true
+  @expression_doc expression: "has_number_eq(\"the number is 0.5\", \"0.5\")", result: true
   @expression_doc expression: "has_number_eq(\"the number is 42.0\", \"42\")", result: true
   @expression_doc expression: "has_number_eq(\"the number is 40\", \"42\")", result: false
   @expression_doc expression: "has_number_eq(\"the number is 40\", \"foo\")", result: false
@@ -1344,6 +1342,7 @@ defmodule Expression.Callbacks.Standard do
   @expression_doc expression: "has_number_gt(\"the number is 42\", 40)", result: true
   @expression_doc expression: "has_number_gt(\"the number is 42\", 40.0)", result: true
   @expression_doc expression: "has_number_gt(\"the number is 42\", \"40\")", result: true
+  @expression_doc expression: "has_number_gt(\"the number is 0.6\", \"0.5\")", result: true
   @expression_doc expression: "has_number_gt(\"the number is 42.0\", \"40\")", result: true
   @expression_doc expression: "has_number_gt(\"the number is 40\", \"40\")", result: false
   @expression_doc expression: "has_number_gt(\"the number is 40\", \"foo\")", result: false
@@ -1367,6 +1366,7 @@ defmodule Expression.Callbacks.Standard do
   @expression_doc expression: "has_number_gte(\"the number is 42\", 42)", result: true
   @expression_doc expression: "has_number_gte(\"the number is 42\", 42.0)", result: true
   @expression_doc expression: "has_number_gte(\"the number is 42\", \"42\")", result: true
+  @expression_doc expression: "has_number_gte(\"the number is 0.5\", \"0.5\")", result: true
   @expression_doc expression: "has_number_gte(\"the number is 42.0\", \"45\")", result: false
   @expression_doc expression: "has_number_gte(\"the number is 40\", \"45\")", result: false
   @expression_doc expression: "has_number_gte(\"the number is 40\", \"foo\")", result: false
@@ -1390,6 +1390,7 @@ defmodule Expression.Callbacks.Standard do
   @expression_doc expression: "has_number_lt(\"the number is 42\", 44)", result: true
   @expression_doc expression: "has_number_lt(\"the number is 42\", 44.0)", result: true
   @expression_doc expression: "has_number_lt(\"the number is 42\", \"40\")", result: false
+  @expression_doc expression: "has_number_lt(\"the number is 0.6\", \"0.5\")", result: false
   @expression_doc expression: "has_number_lt(\"the number is 42.0\", \"40\")", result: false
   @expression_doc expression: "has_number_lt(\"the number is 40\", \"40\")", result: false
   @expression_doc expression: "has_number_lt(\"the number is 40\", \"foo\")", result: false
@@ -1413,6 +1414,7 @@ defmodule Expression.Callbacks.Standard do
   @expression_doc expression: "has_number_lte(\"the number is 42\", 42)", result: true
   @expression_doc expression: "has_number_lte(\"the number is 42\", 42.0)", result: true
   @expression_doc expression: "has_number_lte(\"the number is 42\", \"42\")", result: true
+  @expression_doc expression: "has_number_lte(\"the number is 0.5\", \"0.5\")", result: true
   @expression_doc expression: "has_number_lte(\"the number is 42.0\", \"40\")", result: false
   @expression_doc expression: "has_number_lte(\"the number is 40\", \"foo\")", result: false
   @expression_doc expression: "has_number_lte(\"four hundred\", \"foo\")", result: false
