@@ -1064,6 +1064,21 @@ defmodule Expression.Callbacks.Standard do
                     "date" => nil,
                     "datetime" => nil
                   }
+  @expression_doc expression: "has_date(1)",
+                  result: %{
+                    "__value__" => false,
+                    "date" => nil,
+                    "datetime" => nil,
+                    "match" => nil
+                  }
+  @expression_doc expression: "has_date(var)",
+                  context: %{"var" => 1},
+                  result: %{
+                    "__value__" => false,
+                    "date" => nil,
+                    "datetime" => nil,
+                    "match" => nil
+                  }
   def has_date(ctx, expression) do
     {date, datetime} =
       if datetime = DateHelpers.extract_datetimeish(eval!(expression, ctx)) do
