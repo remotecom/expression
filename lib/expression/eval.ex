@@ -240,6 +240,7 @@ defmodule Expression.Eval do
   def op(operator, a, b) when operator in @numeric_kernel_operators do
     args =
       [a, b]
+      |> Enum.map(&parse_number/1)
       |> Enum.map(&guard_type!(&1, :num))
       |> Enum.map(&default_value/1)
 
@@ -248,9 +249,35 @@ defmodule Expression.Eval do
 
   # just leave it to the Kernel to figure out at this stage
   def op(operator, a, b) when operator in @kernel_operators do
-    args = Enum.map([a, b], &default_value/1)
+    args =
+      [a, b]
+      |> Enum.map(&parse_number/1)
+      |> Enum.map(&default_value/1)
+
     apply(Kernel, operator, args)
   end
+
+  @doc """
+  Parses a given value into a number, being an integer or a float.
+  If the given value is not able to be parsed, then it returns the raw value.
+  """
+  def parse_number(%{"__value__" => value}), do: parse_number(value)
+
+  def parse_number(value) when is_binary(value) do
+    case Decimal.parse(value) do
+      {decimal, _} ->
+        if Decimal.integer?(decimal) do
+          Decimal.to_integer(decimal)
+        else
+          Decimal.to_float(decimal)
+        end
+
+      :error ->
+        value
+    end
+  end
+
+  def parse_number(value), do: value
 
   @doc """
   Return the default value for a potentially complex value.
