@@ -257,9 +257,13 @@ defmodule Expression.Eval do
     apply(Kernel, operator, args)
   end
 
-  defp parse_number(%{"__value__" => value}), do: parse_number(value)
+  @doc """
+  Parses a given value into a number, being an integer or a float.
+  If the given value is not able to be parsed, then it returns the raw value.
+  """
+  def parse_number(%{"__value__" => value}), do: parse_number(value)
 
-  defp parse_number(value) when is_binary(value) do
+  def parse_number(value) when is_binary(value) do
     case Decimal.parse(value) do
       {decimal, _} ->
         if Decimal.integer?(decimal) do
@@ -273,7 +277,7 @@ defmodule Expression.Eval do
     end
   end
 
-  defp parse_number(value), do: value
+  def parse_number(value), do: value
 
   @doc """
   Return the default value for a potentially complex value.
