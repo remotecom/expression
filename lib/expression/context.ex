@@ -56,7 +56,7 @@ defmodule Expression.Context do
     if String.match?("0" <> value, ~r/^[0-9]/) do
       {key, "0" <> value}
     else
-      iterate({key, "0" <> value}, opts) |> dbg()
+      iterate({key, "0" <> value}, opts)
     end
   end
 
