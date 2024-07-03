@@ -99,6 +99,7 @@ defmodule ExpressionTest do
     end
 
     test "list with indices" do
+      assert "baz" == Expression.evaluate_as_string!("@foo[0]", %{"foo" => ["baz", "bar"]})
       assert "bar" == Expression.evaluate_as_string!("@foo[1]", %{"foo" => ["baz", "bar"]})
     end
 
@@ -108,6 +109,25 @@ defmodule ExpressionTest do
                  "foo" => ["baz", "bar"],
                  "cursor" => 1
                })
+
+      assert "hello" ==
+               Expression.evaluate_block!("content_units_response.body[current_activity]", %{
+                 "content_units_response" => %{
+                   "body" => ["hello", "bye"]
+                 },
+                 "current_activity" => 0
+               })
+
+      assert "hello" ==
+               Expression.evaluate_block!(
+                 "content_units_response.body[current_activity]",
+                 %{
+                   "content_units_response" => %{
+                     "body" => ["hello", "bye"]
+                   },
+                   "current_activity" => "0"
+                 }
+               )
     end
 
     test "stringify primitives" do

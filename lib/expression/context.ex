@@ -50,11 +50,13 @@ defmodule Expression.Context do
   end
 
   # Prevent implictly converting numbers starting with a zero
+  defp iterate({key, "0"}, _opts), do: {key, 0}
+
   defp iterate({key, "0" <> value}, opts) when is_binary(value) do
     if String.match?("0" <> value, ~r/^[0-9]/) do
       {key, "0" <> value}
     else
-      iterate({key, value}, opts)
+      iterate({key, "0" <> value}, opts) |> dbg()
     end
   end
 
