@@ -29,6 +29,11 @@ defmodule Expression.ContextTest do
     end
   end
 
+  test "new context with zero as a string" do
+    # Assert that the string "0" is parsed as a number
+    assert Context.new(%{"zero" => "0"}) == %{"zero" => 0}
+  end
+
   test "new context from a context containing a string starting with zero" do
     values = [
       %{"national_id" => "01234567"},

@@ -49,6 +49,9 @@ defmodule Expression.Context do
     {key, evaluate!(value, opts)}
   end
 
+  # Implictly convert the string "0" as a number
+  defp iterate({key, "0"}, _opts), do: {key, 0}
+
   # Prevent implictly converting numbers starting with a zero
   defp iterate({key, "0" <> value}, opts) when is_binary(value) do
     if String.match?("0" <> value, ~r/^[0-9]/) do
