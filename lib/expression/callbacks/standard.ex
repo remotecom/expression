@@ -573,7 +573,7 @@ defmodule Expression.Callbacks.Standard do
   ```
   """
   @expression_doc expression: "fixed(4.209922, 2, false)", result: "4.21"
-  @expression_doc expression: "fixed(4000.424242, 4, true)", result: "4,000.4242"
+  @expression_doc expression: "fixed(4000.424242, 4, true)", result: "4000.4242"
   @expression_doc expression: "fixed(3.7979, 2, false)", result: "3.80"
   @expression_doc expression: "fixed(3.7979, 2)", result: "3.80"
   @expression_doc expression: "fixed(0.0909, 2)", result: "0.09"
@@ -587,7 +587,7 @@ defmodule Expression.Callbacks.Standard do
       [number, precision, true] ->
         Number.Delimit.number_to_delimited(number,
           precision: precision,
-          delimiter: ",",
+          delimiter: "",
           separator: "."
         )
 
