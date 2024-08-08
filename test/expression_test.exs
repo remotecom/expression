@@ -97,6 +97,9 @@ defmodule ExpressionTest do
       assert true == Expression.evaluate_as_boolean!("@(\"1\" * 2 == 2)")
       assert true == Expression.evaluate_as_boolean!("@(\"0.1\" * 0.2 == 0.020000000000000004)")
 
+      assert true == Expression.evaluate_as_boolean!("@(\"1. A\" == \"1. A\")")
+      assert false == Expression.evaluate_as_boolean!("@(\"1. A\" == \"1. A wrong\")")
+
       assert_raise RuntimeError, "expression is not a number: `\"NaN\"`", fn ->
         Expression.evaluate_as_boolean!("@(1 * \"NaN\" == 2)")
       end
