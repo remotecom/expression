@@ -264,15 +264,15 @@ defmodule Expression.Eval do
   def parse_number(%{"__value__" => value}), do: parse_number(value)
 
   def parse_number(value) when is_binary(value) do
-    with {_integer, _rem} <- Integer.parse(value),
-         {decimal, _rem} <- Decimal.parse(value) do
-      if Decimal.integer?(decimal) do
-        Decimal.to_integer(decimal)
-      else
-        Decimal.to_float(decimal)
-      end
-    else
-      _error -> value
+    case Integer.parse(value) do
+      {integer, ""} ->
+        integer
+
+      _other ->
+        case Float.parse(value) do
+          {float, ""} -> float
+          _error -> value
+        end
     end
   end
 

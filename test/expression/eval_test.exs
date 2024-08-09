@@ -115,7 +115,7 @@ defmodule Expression.EvalTest do
 
   describe "lambdas" do
     test "with map" do
-      {:ok, ast, "", _, _, _} = Parser.parse("@map(foo, &([&1,'Button']))")
+      {:ok, ast, "", _, _, _} = Parser.parse("@map(foo, &([&1, 'Button']))")
 
       assert [[1, "Button"], [2, "Button"], [3, "Button"]] ==
                Eval.eval!(ast, %{"foo" => [1, 2, 3]})
@@ -136,6 +136,16 @@ defmodule Expression.EvalTest do
 
       assert [[1, "Button"], [2, "Button"], [3, "Button"]] ==
                Eval.eval!(ast, %{"foo" => [1, 2, 3]})
+    end
+
+    test "with kernel operators" do
+      {:ok, ast, "", _, _, _} = Parser.parse("@map(foo, &(&1 == \"1. selected\"))")
+
+      assert Eval.eval!(ast, %{"foo" => ["1. selected", "1. selected wrong", "other"]}) == [
+               true,
+               false,
+               false
+             ]
     end
 
     test "lambda with joins" do
