@@ -138,7 +138,7 @@ defmodule Expression.EvalTest do
                Eval.eval!(ast, %{"foo" => [1, 2, 3]})
     end
 
-    test "with kerner operators" do
+    test "with kernel operators" do
       {:ok, ast, "", _, _, _} = Parser.parse("@map(foo, &(&1 == \"1. selected\"))")
 
       assert Eval.eval!(ast, %{"foo" => ["1. selected", "1. selected wrong", "other"]}) == [
