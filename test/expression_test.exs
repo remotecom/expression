@@ -157,6 +157,26 @@ defmodule ExpressionTest do
       assert "1.5" == Expression.evaluate_as_string!(1.5)
     end
 
+    test "if a number starts with zero, do not convert it" do
+      assert "01234" =
+               Expression.evaluate!("@foo.name", %{"foo" => %{"name" => "01234"}})
+    end
+
+    test "if a number does not start with zero convert it to int" do
+      assert 1234 =
+               Expression.evaluate!("@foo.name", %{"foo" => %{"name" => "1234"}})
+    end
+
+    test "if a number does not start with zero convert it to float" do
+      assert 1234.12 =
+               Expression.evaluate!("@foo.name", %{"foo" => %{"name" => "1234.12"}})
+    end
+
+    test "if a number does start with zero do not apply any conversion" do
+      assert "01234.12" =
+               Expression.evaluate!("@foo.name", %{"foo" => %{"name" => "01234.12"}})
+    end
+
     test "list with attribute" do
       assert "bar" =
                Expression.evaluate_as_string!("@foo[0].name", %{"foo" => [%{"name" => "bar"}]})
